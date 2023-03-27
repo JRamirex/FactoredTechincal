@@ -13,7 +13,7 @@ def read_root():
     return {'Hello World'}
 
 
-@app.post('/api/users')
+@app.post('/back/users')
 async def create_user(
     user: schemas.UserCreate, db: orm.Session = Depends(services.get_db)
 ):
@@ -26,7 +26,7 @@ async def create_user(
     return await services.create_user(user, db)
     
 
-@app.post('/api/token')
+@app.post('/back/token')
 async def generate_token(
     form_data: security.OAuth2PasswordRequestForm = Depends(),
     db: orm.Session = Depends(services.get_db)
@@ -37,3 +37,8 @@ async def generate_token(
         raise HTTPException(status_code = 401, detail = 'Wrong password or user')
     
     return await services.create_token(user)
+
+@app.get('/back/user/me', response_model= schemas.User)
+async def get_user(user: schemas.User = Depends(services.get_current_user)):
+    return user
+    
