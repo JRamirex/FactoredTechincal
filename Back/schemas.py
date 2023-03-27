@@ -1,8 +1,10 @@
 import pydantic as pydantic
 
-class User(pydantic.BaseModel):
+class UserBase(pydantic.BaseModel):
+    email: str
+
+class UserCreate(UserBase):
     id: int
-    email: str 
     hashed_password: str
     name: str
     position: str
@@ -13,3 +15,6 @@ class User(pydantic.BaseModel):
     javaScore: int
     vbaScore: int
     cScore: int
+    
+    class Config:
+        orm_mode = True

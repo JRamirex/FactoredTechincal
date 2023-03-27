@@ -1,14 +1,39 @@
 from typing import Union
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
+import fastapi.security as security
 from pydantic import BaseModel
+import sqlalchemy.orm as orm 
+
+import services, schemas
 
 app = FastAPI()
 
-@app.get("/")
+@app.get('/')
 def read_root():
-    return {"Hello": "World"}
+    return {'Hello World'}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.post('/api/users')
+async def create_user(
+    user: schemas.UserCreate, db: orm.Session = Depends(services.get_db)
+):
+    db_user = await services.get_user_by_email(user.email, db)
+    
+    if db_user:
+        print(db_user)
+        raise HTTPException(status_code=400, detail='Email already in use')
+    
+    return await services.create_user(user, db)
+    
+
+@app.post('/api/token')
+async def generate_token(
+    form_data: security.OAuth2PasswordRequestForm = Depends(),
+    db: orm.Session = Depends(services.get_db)
+):
+    user = await services.authenticate_user(form_data.username, form_data.password, db)
+    
+    if not user:
+        raise HTTPException(status_code = 401, detail = 'Wrong password or user')
+    
+    return await services.create_token(user)
