@@ -8,7 +8,7 @@ import services, schemas
 
 app = FastAPI()
 
-@app.get('/')
+@app.get('/back')
 def read_root():
     return {'Hello World'}
 
