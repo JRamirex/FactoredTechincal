@@ -6,7 +6,19 @@ import sqlalchemy.orm as orm
 
 import services, schemas
 
+# Fix to cors issues
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+origins = [
+    'http://localhost:3000'
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins
+)
 
 @app.get('/back')
 def read_root():
@@ -23,7 +35,9 @@ async def create_user(
         print(db_user)
         raise HTTPException(status_code=400, detail='Email already in use')
     
-    return await services.create_user(user, db)
+    user = await services.create_user(user, db)
+    
+    return await services.create_token(user, db)
     
 
 @app.post('/back/token')
