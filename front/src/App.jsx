@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <>
-      <Header title={message} />
+      <Header title='Welcome' />
       <div className='columns'></div>
       <div className="colum-m-5-is-two-thirds">
         {!token ? (

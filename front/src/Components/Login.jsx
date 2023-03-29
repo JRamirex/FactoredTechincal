@@ -45,7 +45,7 @@ const Login = () =>
     return (
         <div className="column">
             <form className="box" onSubmit={handleSubmit}>
-                <h1 className="title has-text-centerd"></h1>
+                <label className="label">Email</label>
                 <div className="control">
                     <input
                     type='email'
