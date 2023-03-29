@@ -15,7 +15,6 @@ class UserBase(pydantic.BaseModel):
 
 # La clase que se utiliza para hacer la creación de un usuario, hereda de la clase básica
 class UserCreate(UserBase):
-    id: int
     hashed_password: str
     
     class Config:
@@ -23,6 +22,7 @@ class UserCreate(UserBase):
         
 # La clase que se trae cuando se quiere traer un usuario
 class User(UserBase):
+    id: int
     class Config:
         orm_mode = True
 

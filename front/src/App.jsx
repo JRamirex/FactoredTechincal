@@ -1,8 +1,11 @@
-import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import Login from './Components/Login';
+import Header from './Components/Header';
+import { UserContext } from './context/UserContext';
 
 const App = () => {
   const [message, setMessage] = useState('');
+  const [token,] = useContext(UserContext)
 
   const getWelcomMessage = async () => {
     const requestOptions = {
@@ -14,8 +17,6 @@ const App = () => {
     };
     const response = await fetch('http://localhost:8000/back', requestOptions);
     const data = await response.json();
-
-    console.log(data);
   };
 
   useEffect(() => {
@@ -23,9 +24,21 @@ const App = () => {
   }, [])
 
   return (
-    <div>
-      <h1>Test</h1>
-    </div>
+    <>
+      <Header title={message} />
+      <div className='columns'></div>
+      <div className="colum-m-5-is-two-thirds">
+        {!token ? (
+          <div className='columns'>
+            <Login/>
+          </div>
+        ):(
+          <p>Table</p>
+        )
+        }
+      </div>
+      <div className='column'></div>
+    </>
   );
 }
 

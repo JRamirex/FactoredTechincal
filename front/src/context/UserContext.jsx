@@ -2,7 +2,8 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
 
-export const UserProvider = (props) => {
+export const UserProvider = (props) => 
+{
     const [token, setToken] = useState(localStorage.getItem('myUserToken'))
     useEffect(() =>{
         const fetchUser = async () => {
@@ -14,19 +15,20 @@ export const UserProvider = (props) => {
                 },
             };
 
-            const responde = await fetch('/back/users/me', requestOptions);
+            const response = await fetch('http://localhost:8000/back/user/me', requestOptions);
 
-            if (!Response.ok){
+            if (!response.ok){
                 setToken(null);
             }
             localStorage.setItem('myUserToken', token);
         };
         fetchUser();
     }, [token]);
+
+    return(
+        <UserContext.Provider value = {[token, setToken]}>
+            {props.children}
+        </UserContext.Provider>
+    )
 }
 
-return(
-    <UserContext.Provider value = {[token, setToken]}>
-        {props.children}
-    </UserContext.Provider>
-)
