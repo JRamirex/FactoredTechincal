@@ -37,9 +37,8 @@ async def create_user(
     if db_user:
         raise HTTPException(status_code=400, detail='Email already in use')
     
-    user = await services.create_user(user, db)
-    
-    return await services.create_token(user)
+    return await services.create_user(user, db)
+
     
 
 @app.post('/back/token')

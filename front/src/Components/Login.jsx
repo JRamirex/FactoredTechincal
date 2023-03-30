@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { UserContext } from "../context/UserContext";
 
-const Login = () =>
+const Login = (props) =>
 {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -30,7 +30,24 @@ const Login = () =>
         else 
         {
             setToken(data.access_token);
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: 'Bearer ' + data.access_token
+                },
+            };
+            fetch('http://localhost:8000/back/user/me',requestOptions).then
+            (
+                response => response.json()).then
+                (
+                    response=>{
+                        console.log('usuariofinal',response)
+                        props.userFunction(response)
+                    }
+                )
         }
+        
         console.log(data)
     };
 

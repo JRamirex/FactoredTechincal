@@ -1,0 +1,6 @@
+FROM python:3.11
+WORKDIR /back
+COPY ./requirements.txt /back/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /back/requirements.txt
+COPY . /back
+CMD {'uvicorn', 'main:app', '--host', 'localhost','--port', '8000'}
